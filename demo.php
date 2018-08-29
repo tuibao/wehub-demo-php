@@ -14,7 +14,11 @@
         exit(0);
     }
     
-    error_log($body);  //显示到日志
+    try {
+        error_log($body);  //显示到日志，Windows IIS下可能有问题，可以自行去掉
+    } catch (Exception $e) {
+        //增加错误捕捉，避免Windows IIS下可能的问题
+    }
 
     $body = json_decode($body, true);
 
