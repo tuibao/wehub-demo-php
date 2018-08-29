@@ -28,7 +28,11 @@
     $data = $body['data'];
 
     if (function_exists($action)) {
-        call_user_func_array($action, [$appid, $wxid, $data]);
+        try {
+            call_user_func_array($action, [$appid, $wxid, $data]);
+        } catch (Exception $e) {
+            return_error_result(['error_reason' => $e->getMessage()]);
+        }
     } else {
         return_error_result(['error_reason' => '接口未实现']);
     }
