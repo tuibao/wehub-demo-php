@@ -44,7 +44,7 @@
     function return_error_result($params=['error_reason' => '未知错误']) {
         $base_result = [
             'error_code' => 1,
-            'error_reason' => $error_reason
+            'error_reason' => $params['error_reason']
         ];
         echo json_encode(array_merge($base_result, $params));
         exit;
@@ -77,28 +77,45 @@
     function report_new_msg($app, $wxid, $data) {
         $message = $data['msg'];
         $room_wxid = isset($message['room_wxid']) ? $message['room_wxid'] : '';
-        $sender_wxid = $message['wxid'];
+        $sender_wxid = $message['wxid_from'];
         if ($wxid == $sender_wxid) {
             $reply = [];
         } else {
-            $reply = [
-                'task_type' => 1,
-                'task_dict' => [
-                    'room_wxid' => $room_wxid,
-                    'wxid'      => $sender_wxid,
-                    'msg_list'       => [
-                        [
-                            'msg_type' => 1,
-                            'msg' => "Hello, 这是来自Demo的回复",
+            if(empty($room_wxid)) {
+                $reply = [
+                    'task_type' => 1,
+                    'task_dict' => [
+                        'wxid_to'      => $sender_wxid,
+                        'at_list'      => [],
+                        'msg_list'     => [
+                            [
+                                'msg_type' => 1,
+                                'msg' => "Hello, 这是来自Demo的回复",
+                            ]
                         ]
                     ]
-                ]
-            ];
+                ];
+            } else {
+                $reply = [
+                    'task_type' => 1,
+                    'task_dict' => [
+                        'wxid_to'      => $room_wxid,
+                        'at_list'      =>[$sender_wxid],
+                        'msg_list'     => [
+                            [
+                                'msg_type' => 1,
+                                'msg' => "Hello, 这是来自Demo的回复",
+                            ]
+                        ]
+                    ]
+                ];
+            }
         }
 
         if (strtolower($message['msg']) !== 'hello' && strtolower($message['msg']) !== 'hi') {
             $reply = [];
         }
+       
         return_success_result([
             'error_code'   => 0,
             'error_reason' => '',
