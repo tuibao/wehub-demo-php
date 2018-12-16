@@ -175,7 +175,7 @@
             'task_data' => [
                 'task_type' => 1,
                 'task_dict' => [
-                    'wxid' => 'fangqing_hust',
+                    'wxid_to' => 'fangqing_hust',
                     'msg_list' => [
                         [
                             'msg_type' => 1,
