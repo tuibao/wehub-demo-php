@@ -60,7 +60,16 @@
     }
     
     function login($app, $wxid, $data) {
-        return_success_result();
+        
+        $params = [
+            'ack_type' => 'login_ack',
+            'data' => []
+        ];
+        if (isset($data['nonce'])) {
+            $secretkey = '112233'; //需要修改成自己的secretkey，在登录网页获取
+            $params['data']['signature'] = md5($wxid.'#'.$data['nonce'].'#'.$secretkey);
+        }
+        return_success_result($param);
     }
 
     function logout($app, $wxid, $data) {
