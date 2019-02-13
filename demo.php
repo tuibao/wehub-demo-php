@@ -69,7 +69,7 @@
             $secretkey = '112233'; //需要修改成自己的secretkey，在登录网页获取
             $params['data']['signature'] = md5($wxid.'#'.$data['nonce'].'#'.$secretkey);
         }
-        return_success_result($param);
+        return_success_result($params);
     }
 
     function logout($app, $wxid, $data) {
